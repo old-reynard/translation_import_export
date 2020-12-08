@@ -4,8 +4,18 @@ import csv
 from datetime import datetime
 from typing import List
 
-folder = '/Users/ngerasimov/apps/myplans/lib/l10n'
-source = f'{folder}/intl_messages.arb'
+from utils import die
+
+# home directory for the project
+home = os.environ.get('HVR_HOME')
+if not home:
+    die('Home directory not found')
+
+# directory with all string resources in it
+resource_folder = f'{home}/lib/l10n'
+# source file with raw string resources
+# this is where the app exports all translatable resources to
+source = f'{resource_folder}/intl_messages.arb'
 
 
 def meaningful_key(k: str) -> bool:
@@ -30,7 +40,7 @@ def get_locale_name(filename: str) -> str:
 
 
 resources = open(source)
-source_files = find_language_files(folder)
+source_files = find_language_files(resource_folder)
 languages = parse(source_files)
 
 main_arb_file = resources.read()
@@ -61,8 +71,8 @@ writer.writerow(['id', 'source', 'description'] + list(languages.keys()) + ['typ
 for line in data:
     key = list(line.keys())[0]
     value = line[key]
-    source = value.get('source') or ''
-    desc = value.get('desc') or ''
+    source = value.get('source', '')
+    desc = value.get('desc', '')
     t = value.get('type', '')
     placeholders = value.get('placeholders', '')
     row = [key, source, desc]
