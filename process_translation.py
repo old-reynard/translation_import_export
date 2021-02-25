@@ -56,5 +56,5 @@ for name, translation in translations.items():
     lang, country_code = name.split('_')
     formatted = f'{lang}_{country_code.upper()}'
     translation.resources['@@locale'] = formatted
-    arb = open(f'intl_{formatted}.arb', mode='w', encoding='utf-8')
+    arb = open(f'done/intl_{formatted}.arb', mode='w', encoding='utf-8')
     json.dump(translation.resources, arb, indent=4, ensure_ascii=False)
